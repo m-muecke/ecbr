@@ -11,7 +11,9 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 <!-- badges: end -->
 
 The goal of ecbr is to provide a simple interface to the [ECB
-API](https://data.ecb.europa.eu/help/api/overview).
+API](https://data.ecb.europa.eu/help/api/overview). The main difference
+to other packages is that it’s a modern implementation using the
+[httr2](https://httr2.r-lib.org) package.
 
 ## Installation
 

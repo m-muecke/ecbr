@@ -21,6 +21,7 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 The goal of ecbr is to provide a simple interface to the [ECB API](https://data.ecb.europa.eu/help/api/overview).
+The main difference to other packages is that it's a modern implementation using the [httr2](https://httr2.r-lib.org) package.
 
 ## Installation
 You can install the development version of ecbr from [GitHub](https://github.com/) with:
