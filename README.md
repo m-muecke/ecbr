@@ -37,7 +37,7 @@ library(ggplot2)
 
 ggplot(fx_rate, aes(x = date, y = value)) +
   geom_line() +
-  labs(x = "", y = "", title = fx_rate[1, "title"]) +
+  labs(x = "", y = "", title = fx_rate[1, "title", drop = TRUE]) +
   theme_minimal()
 ```
 
