@@ -25,6 +25,23 @@ You can install the development version of ecbr from
 pak::pak("m-muecke/ecbr")
 ```
 
+## Usage
+
+``` r
+library(ecbr)
+
+# fetch US dollar/Euro exchange rate
+fx_rate <- ecb_data("EXR", "D.USD.EUR.SP00.A", start_period = "2021-01-01")
+
+library(ggplot2)
+
+ggplot(fx_rate, aes(x = date, y = value)) +
+  geom_line() +
+  labs(x = "Date", y = "Exchange Rate")
+```
+
+<img src="man/figures/README-demo-1.png" width="100%" />
+
 ## Related work
 
 - [ecb](https://github.com/expersso/ecb): R interface to the European
