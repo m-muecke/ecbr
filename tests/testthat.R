@@ -9,4 +9,4 @@
 library(testthat)
 library(ecbr)
 
-test_check("bundesbank")
+test_check("ecbr")

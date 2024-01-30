@@ -31,7 +31,7 @@ retrieved up to the most recent available date). Default \code{NULL}.}
 Returns data for a given flow and key
 }
 \examples{
-fetch US dollar/Euro exchange rate
+# fetch US dollar/Euro exchange rate
 ecb_data("EXR", "D.USD.EUR.SP00.A")
 }
 \references{

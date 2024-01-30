@@ -18,7 +18,7 @@
 #' @family data
 #' @export
 #' @examples
-#' fetch US dollar/Euro exchange rate
+#' # fetch US dollar/Euro exchange rate
 #' ecb_data("EXR", "D.USD.EUR.SP00.A")
 ecb_data <- function(flow,
                      key = NULL,
@@ -79,8 +79,8 @@ ecb_data <- function(flow,
   as_tibble(data)
 }
 
-#' ecb_data_structure("ECB", "ECB_EXR1")
 ecb_data_structure <- function(agency = NULL, id = NULL) {
+  # ecb_data_structure("ECB", "ECB_EXR1")
   ecb_metadata("datastructure", id)
 }
 
