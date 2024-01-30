@@ -43,7 +43,8 @@ library(ggplot2)
 
 ggplot(fx_rate, aes(x = date, y = value)) +
   geom_line() +
-  labs(x = "Date", y = "Exchange Rate")
+  labs(x = "", y = "", title = fx_rate[1, "title"]) +
+  theme_minimal()
 ```
 
 ## Related work
