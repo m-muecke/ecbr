@@ -107,13 +107,19 @@ parse_metadata <- function(x, lang) {
   res
 }
 
+ecb_error_body <- function(resp) {
+  message <- resp_body_string(resp)
+  docs <- "See docs at <https://data.ecb.europa.eu/help/api/status-codes>"
+  c(message, docs)
+}
+
 ecb <- function(resource, ...) {
   request("https://data-api.ecb.europa.eu/service/") |>
     req_user_agent("ecbr (https://m-muecke.github.io/ecbr)") |>
     # req_headers(`Accept-Language` = "en") |>
     req_url_path_append(resource) |>
     req_url_query(...) |>
-    # req_error(body = bb_error_body) |>
+    req_error(body = ecb_error_body) |>
     req_perform() |>
     resp_body_xml()
 }
