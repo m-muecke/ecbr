@@ -48,7 +48,7 @@ subtitle <- fx_rate[1, "description", drop = TRUE]
 
 ggplot(fx_rate, aes(x = date, y = value)) +
   geom_line() +
-  labs(x = "", y = "", title = title, subtitle = subtitle) +
+  labs(x = NULL, y = NULL, title = title, subtitle = subtitle) +
   theme_minimal()
 ```
 
