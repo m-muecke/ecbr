@@ -82,17 +82,30 @@
 <span></span>
 <span><span class="co"># fetch US dollar/Euro exchange rate</span></span>
 <span><span class="va">fx_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ecb_data.html">ecb_data</a></span><span class="op">(</span><span class="st">"EXR"</span>, <span class="st">"D.USD.EUR.SP00.A"</span>, start_period <span class="op">=</span> <span class="st">"2021-01-01"</span><span class="op">)</span></span>
+<span><span class="va">fx_rate</span></span>
+<span><span class="co">#&gt; # A tibble: 793 × 6</span></span>
+<span><span class="co">#&gt;    date       title          description                   unit  frequency value</span></span>
+<span><span class="co">#&gt;    &lt;date&gt;     &lt;chr&gt;          &lt;chr&gt;                         &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 2021-01-04 US dollar/Euro ECB reference exchange rate,… USD   daily      1.23</span></span>
+<span><span class="co">#&gt;  2 2021-01-05 US dollar/Euro ECB reference exchange rate,… USD   daily      1.23</span></span>
+<span><span class="co">#&gt;  3 2021-01-06 US dollar/Euro ECB reference exchange rate,… USD   daily      1.23</span></span>
+<span><span class="co">#&gt;  4 2021-01-07 US dollar/Euro ECB reference exchange rate,… USD   daily      1.23</span></span>
+<span><span class="co">#&gt;  5 2021-01-08 US dollar/Euro ECB reference exchange rate,… USD   daily      1.23</span></span>
+<span><span class="co">#&gt;  6 2021-01-11 US dollar/Euro ECB reference exchange rate,… USD   daily      1.22</span></span>
+<span><span class="co">#&gt;  7 2021-01-12 US dollar/Euro ECB reference exchange rate,… USD   daily      1.22</span></span>
+<span><span class="co">#&gt;  8 2021-01-13 US dollar/Euro ECB reference exchange rate,… USD   daily      1.22</span></span>
+<span><span class="co">#&gt;  9 2021-01-14 US dollar/Euro ECB reference exchange rate,… USD   daily      1.21</span></span>
+<span><span class="co">#&gt; 10 2021-01-15 US dollar/Euro ECB reference exchange rate,… USD   daily      1.21</span></span>
+<span><span class="co">#&gt; # ℹ 783 more rows</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
+<span><span class="va">title</span> <span class="op">&lt;-</span> <span class="va">fx_rate</span><span class="op">[</span><span class="fl">1</span>, <span class="st">"title"</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span>
+<span><span class="va">subtitle</span> <span class="op">&lt;-</span> <span class="va">fx_rate</span><span class="op">[</span><span class="fl">1</span>, <span class="st">"description"</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span>
+<span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">fx_rate</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="st">""</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">""</span>,</span>
-<span>    title <span class="op">=</span> <span class="va">fx_rate</span><span class="op">[</span><span class="fl">1</span>, <span class="st">"title"</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="va">fx_rate</span><span class="op">[</span><span class="fl">1</span>, <span class="st">"description"</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="va">title</span>, subtitle <span class="op">=</span> <span class="va">subtitle</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-demo-1.png" width="100%"></p>
 </div>
