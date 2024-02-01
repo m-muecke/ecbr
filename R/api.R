@@ -14,6 +14,10 @@
 #' @param end_period `character(1)` end date of the data, in the same format as
 #'   start_period. If `NULL`, no end date restriction is applied (data
 #'   retrieved up to the most recent available date). Default `NULL`.
+#' @param first_n `numeric(1)` number of observations to retrieve from the
+#'   start of the series. If `NULL`, no restriction is applied. Default `NULL`.
+#' @param last_n `numeric(1)` number of observations to retrieve from the end
+#'  of the series. If `NULL`, no restriction is applied. Default `NULL`.
 #' @references <https://data.ecb.europa.eu/help/api/data>
 #' @family data
 #' @export
@@ -23,15 +27,25 @@
 ecb_data <- function(flow,
                      key = NULL,
                      start_period = NULL,
-                     end_period = NULL) {
+                     end_period = NULL,
+                     first_n = NULL,
+                     last_n = NULL) {
   stopifnot(is_string(flow))
   stopifnot(is_string_or_null(key))
   stopifnot(is_string_or_null(start_period))
   stopifnot(is_string_or_null(end_period))
+  stopifnot(is_count_or_null(first_n))
+  stopifnot(is_count_or_null(last_n))
 
   key <- key %||% "all"
   resource <- paste("data", flow, key, sep = "/")
-  body <- ecb(resource, startPeriod = start_period, endPeriod = end_period)
+  body <- ecb(
+    resource = resource,
+    startPeriod = start_period,
+    endPeriod = end_period,
+    firstNObservations = first_n,
+    lastNObservations = last_n
+  )
 
   freq <- body |>
     xml2::xml_find_first("//generic:Value[@id='FREQ']") |>
@@ -51,18 +65,21 @@ ecb_data <- function(flow,
   description <- body |>
     xml2::xml_find_first("//generic:Value[@id='TITLE_COMPL']") |>
     xml2::xml_attr("value")
+  unit <- body |>
+    xml2::xml_find_first("//generic:Value[@id='UNIT']") |>
+    xml2::xml_attr("value")
 
   entries <- body |> xml2::xml_find_all("//generic:Obs[generic:ObsValue]")
   date <- entries |>
     xml2::xml_find_all(".//generic:ObsDimension") |>
     xml2::xml_attr("value")
 
-  # TODO: make monthly date as well
-  if (freq == "daily") {
-    date <- as.Date(date, format = "%Y-%m-%d")
-  } else if (freq == "annual") {
-    date <- as.integer(date)
-  }
+  date <- switch(freq,
+    daily = as.Date(date),
+    monthly = as.Date(paste0(date, "-01")),
+    annual = as.integer(date),
+    date
+  )
 
   value <- entries |>
     xml2::xml_find_all(".//generic:ObsValue") |>
@@ -73,7 +90,8 @@ ecb_data <- function(flow,
     date = date,
     title = title,
     description = description,
-    freq = freq,
+    unit = unit,
+    frequency = freq,
     value = value
   )
   as_tibble(data)
