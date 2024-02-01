@@ -38,17 +38,16 @@ library(ecbr)
 
 # fetch US dollar/Euro exchange rate
 fx_rate <- ecb_data("EXR", "D.USD.EUR.SP00.A", start_period = "2021-01-01")
+fx_rate
 
 library(ggplot2)
 
+title <- fx_rate[1, "title", drop = TRUE]
+subtitle <- fx_rate[1, "description", drop = TRUE]
+
 ggplot(fx_rate, aes(x = date, y = value)) +
   geom_line() +
-  labs(
-    x = "",
-    y = "",
-    title = fx_rate[1, "title", drop = TRUE],
-    subtitle = fx_rate[1, "description", drop = TRUE]
-  ) +
+  labs(x = "", y = "", title = title, subtitle = subtitle) +
   theme_minimal()
 ```
 

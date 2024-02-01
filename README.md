@@ -32,17 +32,30 @@ library(ecbr)
 
 # fetch US dollar/Euro exchange rate
 fx_rate <- ecb_data("EXR", "D.USD.EUR.SP00.A", start_period = "2021-01-01")
+fx_rate
+#> # A tibble: 793 × 6
+#>    date       title          description                   unit  frequency value
+#>    <date>     <chr>          <chr>                         <chr> <chr>     <dbl>
+#>  1 2021-01-04 US dollar/Euro ECB reference exchange rate,… USD   daily      1.23
+#>  2 2021-01-05 US dollar/Euro ECB reference exchange rate,… USD   daily      1.23
+#>  3 2021-01-06 US dollar/Euro ECB reference exchange rate,… USD   daily      1.23
+#>  4 2021-01-07 US dollar/Euro ECB reference exchange rate,… USD   daily      1.23
+#>  5 2021-01-08 US dollar/Euro ECB reference exchange rate,… USD   daily      1.23
+#>  6 2021-01-11 US dollar/Euro ECB reference exchange rate,… USD   daily      1.22
+#>  7 2021-01-12 US dollar/Euro ECB reference exchange rate,… USD   daily      1.22
+#>  8 2021-01-13 US dollar/Euro ECB reference exchange rate,… USD   daily      1.22
+#>  9 2021-01-14 US dollar/Euro ECB reference exchange rate,… USD   daily      1.21
+#> 10 2021-01-15 US dollar/Euro ECB reference exchange rate,… USD   daily      1.21
+#> # ℹ 783 more rows
 
 library(ggplot2)
 
+title <- fx_rate[1, "title", drop = TRUE]
+subtitle <- fx_rate[1, "description", drop = TRUE]
+
 ggplot(fx_rate, aes(x = date, y = value)) +
   geom_line() +
-  labs(
-    x = "",
-    y = "",
-    title = fx_rate[1, "title", drop = TRUE],
-    subtitle = fx_rate[1, "description", drop = TRUE]
-  ) +
+  labs(x = "", y = "", title = title, subtitle = subtitle) +
   theme_minimal()
 ```
 
