@@ -97,29 +97,62 @@ ecb_data <- function(flow,
   as_tibble(data)
 }
 
+#' Returns available data structures
+#'
+#' @param agency `character(1)` the agency to query. Defaut `NULL`.
+#' @param id `character(1)` id to query. Default `NULL`.
+#' @returns A `data.frame()` with the available data structures.
+#' The columns are:
+#'   \item{id}{The id of the data structure}
+#'   \item{name}{The name of the data structure}
+#' @references <https://data.ecb.europa.eu/help/api/metadata>
+#' @family metadata
+#' @export
+#' @examples
+#' ecb_data_structure()
+#' # or filter by id
+#' ecb_data_structure(id = "ECB_BCS1")
 ecb_data_structure <- function(agency = NULL, id = NULL) {
-  # ecb_data_structure("ECB", "ECB_EXR1")
-  ecb_metadata("datastructure", id)
+  ecb_metadata("datastructure", "//str:DataStructure", agency, id)
 }
 
-ecb_metadata <- function(resource, agency = agency, id = NULL) {
+#' Returns available code lists
+#'
+#' @inheritParams ecb_data_structure
+#' @inherit ecb_data_structure references
+#' @returns A data.frame with the available code lists. The columns are:
+#'   \item{id}{The id of the code list}
+#'   \item{name}{The name of the code list}
+#' @family metadata
+#' @export
+#' @examples
+#' ecb_codelist()
+#' # or filter by id
+#' ecb_codelist(id = "CLI_EONIA_BANK")
+ecb_codelist <- function(agency = NULL, id = NULL) {
+  ecb_metadata("codelist", "//str:Codelist", agency, id)
+}
+
+ecb_metadata <- function(resource, xpath, agency = NULL, id = NULL) {
   stopifnot(is_string_or_null(agency))
   stopifnot(is_string_or_null(id))
-  # TODO: I believe that when id has a value, agency also needs to have a value
-  if (!is.null(id)) {
-    resource <- paste(resource, toupper(agency), toupper(id), sep = "/")
-  }
-  ecb(resource)
+  agency <- if (!is.null(agency)) toupper(agency) else "all"
+  id <- if (!is.null(id)) toupper(id) else "all"
+  resource <- paste(resource, agency, id, sep = "/")
+  body <- ecb(resource)
+  entries <- xml2::xml_find_all(body, xpath)
+  res <- parse_metadata(entries)
+  as_tibble(res)
 }
 
-# TODO: code from bundesbank for reference
-parse_metadata <- function(x, lang) {
+parse_metadata <- function(x, lang = "en") {
   res <- lapply(x, \(node) {
+    agency <- xml2::xml_attr(node, "agencyID")
     id <- xml2::xml_attr(node, "id")
     nms <- node |>
-      xml2::xml_find_all(sprintf(".//common:Name[@xml:lang='%s']", lang)) |>
+      xml2::xml_find_all(sprintf(".//com:Name[@xml:lang='%s']", lang)) |>
       xml2::xml_text()
-    data.frame(id = id, name = nms)
+    data.frame(agency = agency, id = id, name = nms)
   })
   do.call(rbind, res)
 }
