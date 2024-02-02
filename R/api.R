@@ -121,8 +121,7 @@ parse_metadata <- function(x, lang) {
       xml2::xml_text()
     data.frame(id = id, name = nms)
   })
-  res <- do.call(rbind, res)
-  res
+  do.call(rbind, res)
 }
 
 ecb_error_body <- function(resp) {
@@ -134,7 +133,6 @@ ecb_error_body <- function(resp) {
 ecb <- function(resource, ...) {
   request("https://data-api.ecb.europa.eu/service/") |>
     req_user_agent("ecbr (https://m-muecke.github.io/ecbr)") |>
-    # req_headers(`Accept-Language` = "en") |>
     req_url_path_append(resource) |>
     req_url_query(...) |>
     req_error(body = ecb_error_body) |>
