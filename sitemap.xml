@@ -19,7 +19,13 @@
     <loc>https://m-muecke.github.io/ecbr/news/index.html</loc>
   </url>
   <url>
+    <loc>https://m-muecke.github.io/ecbr/reference/ecb_codelist.html</loc>
+  </url>
+  <url>
     <loc>https://m-muecke.github.io/ecbr/reference/ecb_data.html</loc>
+  </url>
+  <url>
+    <loc>https://m-muecke.github.io/ecbr/reference/ecb_data_structure.html</loc>
   </url>
   <url>
     <loc>https://m-muecke.github.io/ecbr/reference/ecbr-package.html</loc>
