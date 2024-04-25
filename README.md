@@ -10,10 +10,8 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![R-CMD-check](https://github.com/m-muecke/ecbr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/m-muecke/ecbr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of ecbr is to provide a simple interface to the [ECB
-API](https://data.ecb.europa.eu/help/api/overview). The main difference
-to other packages is that it’s a modern implementation using the
-[httr2](https://httr2.r-lib.org) package.
+ecbr is a minimal R client for the [ECB
+API](https://data.ecb.europa.eu/help/api/overview).
 
 ## Installation
 
@@ -33,7 +31,7 @@ library(ecbr)
 # fetch US dollar/Euro exchange rate
 fx_rate <- ecb_data("EXR", "D.USD.EUR.SP00.A", start_period = "2021-01-01")
 fx_rate
-#> # A tibble: 793 × 6
+#> # A tibble: 851 × 6
 #>   date       title          description                    unit  frequency value
 #>   <date>     <chr>          <chr>                          <chr> <chr>     <dbl>
 #> 1 2021-01-04 US dollar/Euro ECB reference exchange rate, … USD   daily      1.23
@@ -41,22 +39,18 @@ fx_rate
 #> 3 2021-01-06 US dollar/Euro ECB reference exchange rate, … USD   daily      1.23
 #> 4 2021-01-07 US dollar/Euro ECB reference exchange rate, … USD   daily      1.23
 #> 5 2021-01-08 US dollar/Euro ECB reference exchange rate, … USD   daily      1.23
-#> # ℹ 788 more rows
-
-library(ggplot2)
-
-title <- fx_rate[1, "title", drop = TRUE]
-subtitle <- fx_rate[1, "description", drop = TRUE]
-
-ggplot(fx_rate, aes(x = date, y = value)) +
-  geom_line() +
-  labs(x = NULL, y = NULL, title = title, subtitle = subtitle) +
-  theme_minimal()
+#> # ℹ 846 more rows
 ```
 
-<img src="man/figures/README-demo-1.png" width="100%" />
+<img src="man/figures/README-plotting-1.png" width="100%" />
 
 ## Related work
 
 - [ecb](https://github.com/expersso/ecb): R interface to the European
-  Central Bank’s Statistical Data Warehouse (SDW) API
+  Central Bank’s Statistical Data Warehouse (SDW) API.
+- [rsdmx](https://github.com/opensdmx/rsdmx): R package for reading SDMX
+  data and metadata.
+- [readsdmx](https://github.com/mdequeljoe/readsdmx): R package for
+  reading SDMX data and metadata.
+- [pdfetch](https://github.com/abielr/pdfetch): R package for
+  downloading economic and financial time series from public sources.

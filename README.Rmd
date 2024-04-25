@@ -21,8 +21,7 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 [![R-CMD-check](https://github.com/m-muecke/ecbr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/m-muecke/ecbr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of ecbr is to provide a simple interface to the [ECB API](https://data.ecb.europa.eu/help/api/overview).
-The main difference to other packages is that it's a modern implementation using the [httr2](https://httr2.r-lib.org) package.
+ecbr is a minimal R client for the [ECB API](https://data.ecb.europa.eu/help/api/overview).
 
 ## Installation
 You can install the development version of ecbr from [GitHub](https://github.com/) with:
@@ -34,23 +33,37 @@ pak::pak("m-muecke/ecbr")
 
 ## Usage
 
-```{r demo, message = FALSE, dpi = 300}
+```{r demo, message = FALSE}
 library(ecbr)
 
 # fetch US dollar/Euro exchange rate
 fx_rate <- ecb_data("EXR", "D.USD.EUR.SP00.A", start_period = "2021-01-01")
 fx_rate
+```
 
+```{r plotting, message = FALSE, echo = FALSE, dpi = 300}
 library(ggplot2)
 
-title <- fx_rate[1, "title", drop = TRUE]
+title <- tools::toTitleCase(fx_rate[1, "title", drop = TRUE])
 subtitle <- fx_rate[1, "description", drop = TRUE]
 
 ggplot(fx_rate, aes(x = date, y = value)) +
   geom_line() +
-  labs(x = NULL, y = NULL, title = title, subtitle = subtitle) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold"),
+    panel.grid.major.y = element_line(color = "black", linewidth = 0.2),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.text = element_text(color = "black"),
+    axis.title = element_blank()
+  ) +
+  scale_y_continuous(labels = scales::label_currency()) +
+  labs(title = title, subtitle = subtitle)
 ```
 
 ## Related work
-* [ecb](https://github.com/expersso/ecb): R interface to the European Central Bank's Statistical Data Warehouse (SDW) API
+* [ecb](https://github.com/expersso/ecb): R interface to the European Central Bank's Statistical Data Warehouse (SDW) API.
+* [rsdmx](https://github.com/opensdmx/rsdmx): R package for reading SDMX data and metadata.
+* [readsdmx](https://github.com/mdequeljoe/readsdmx): R package for reading SDMX data and metadata.
+* [pdfetch](https://github.com/abielr/pdfetch): R package for downloading economic and financial time series from public sources.

@@ -4,7 +4,7 @@
 \name{ecbr-package}
 \alias{ecbr}
 \alias{ecbr-package}
-\title{ecbr: European Central Bank (ECB) API Wrapper}
+\title{ecbr: Client for the European Central Bank (ECB) API}
 \description{
 Download data from the ECB API.
 }
