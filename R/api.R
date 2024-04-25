@@ -137,7 +137,6 @@ ecb_codelist <- function(agency = NULL, id = NULL) {
   #  <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ECB:CL_EXR_TYPE(1.0).BRC0" id="BRC0">
   #    <com:Name xml:lang="en">Real bilateral exchange rate, CPI deflated</com:Name>
   #  </str:Code>
-
 }
 
 # Note: dataflow for fetching flow id
