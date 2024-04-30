@@ -65,7 +65,6 @@ parse_ecb_data <- function(body) {
       xml2::xml_attr("value") |>
       stats::setNames(nms) |>
       as.list()
-    names(series_key) <- nms
 
     attrs <- x |>
       xml2::xml_find_first(".//generic:Attributes") |>
@@ -92,16 +91,10 @@ parse_ecb_data <- function(body) {
     )
 
     entries <- x |> xml2::xml_find_all(".//generic:Obs[generic:ObsValue]")
-    date <- x |>
+    data$date <- x |>
       xml2::xml_find_all(".//generic:ObsDimension") |>
-      xml2::xml_attr("value")
-
-    data$date <- switch(data$freq,
-      daily = as.Date(date),
-      monthly = as.Date(paste0(date, "-01")),
-      annual = as.integer(date),
-      date
-    )
+      xml2::xml_attr("value") |>
+      parse_date(data$freq)
 
     data$value <- entries |>
       xml2::xml_find_all(".//generic:ObsValue") |>
@@ -116,6 +109,15 @@ parse_ecb_data <- function(body) {
   res <- lapply(res, \(x) x[nms])
   res <- do.call(rbind, res)
   res
+}
+
+parse_date <- function(date, freq) {
+  switch(freq,
+    daily = as.Date(date),
+    monthly = as.Date(paste0(date, "-01")),
+    annual = as.integer(date),
+    date
+  )
 }
 
 #' Returns available data structures
