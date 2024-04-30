@@ -112,7 +112,7 @@ parse_ecb_data <- function(body) {
   })
   nms <- lapply(res, names)
   nms <- Reduce(intersect, nms)
-  nms <- intersect(c("date", "key", "value", "title", "description"), nms)
+  nms <- union(c("date", "key", "value", "title", "description"), nms)
   res <- lapply(res, \(x) x[nms])
   res <- do.call(rbind, res)
   res
