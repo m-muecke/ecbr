@@ -30,12 +30,14 @@ ecb_data <- function(flow,
                      end_period = NULL,
                      first_n = NULL,
                      last_n = NULL) {
-  stopifnot(is_string(flow))
-  stopifnot(is_string(key))
-  stopifnot(is_string_or_null(start_period))
-  stopifnot(is_string_or_null(end_period))
-  stopifnot(is_count_or_null(first_n))
-  stopifnot(is_count_or_null(last_n))
+  stopifnot(
+    is_string(flow),
+    is_string_or_null(key),
+    is_string_or_null(start_period),
+    is_string_or_null(end_period),
+    is_count_or_null(first_n),
+    is_count_or_null(last_n)
+  )
 
   key <- key %||% "all"
   resource <- paste("data", flow, key, sep = "/")
@@ -46,55 +48,74 @@ ecb_data <- function(flow,
     firstNObservations = first_n,
     lastNObservations = last_n
   )
+  res <- parse_ecb_data(body)
+  as_tibble(res)
+}
 
-  freq <- body |>
-    xml2::xml_find_first("//generic:Value[@id='FREQ']") |>
-    xml2::xml_attr("value")
-  freq <- switch(freq,
-    A = "annual",
-    S = "semi-annual",
-    Q = "quarterly",
-    M = "monthly",
-    W = "weekly",
-    D = "daily"
-  )
+parse_ecb_data <- function(body) {
+  series <- body |> xml2::xml_find_all(".//generic:Series")
+  res <- lapply(series, \(x) {
+    series_key <- x |>
+      xml2::xml_find_first(".//generic:SeriesKey") |>
+      xml2::xml_children()
+    nms <- series_key |>
+      xml2::xml_attr("id") |>
+      tolower()
+    series_key <- series_key |>
+      xml2::xml_attr("value") |>
+      stats::setNames(nms) |>
+      as.list()
+    names(series_key) <- nms
 
-  title <- body |>
-    xml2::xml_find_first("//generic:Value[@id='TITLE']") |>
-    xml2::xml_attr("value")
-  description <- body |>
-    xml2::xml_find_first("//generic:Value[@id='TITLE_COMPL']") |>
-    xml2::xml_attr("value")
-  unit <- body |>
-    xml2::xml_find_first("//generic:Value[@id='UNIT']") |>
-    xml2::xml_attr("value")
+    attrs <- x |>
+      xml2::xml_find_first(".//generic:Attributes") |>
+      xml2::xml_children()
+    nms <- attrs |>
+      xml2::xml_attr("id") |>
+      tolower()
+    nms <- replace(nms, nms == "title_compl", "description")
+    attrs <- attrs |>
+      xml2::xml_attr("value") |>
+      stats::setNames(nms) |>
+      as.list()
 
-  entries <- body |> xml2::xml_find_all("//generic:Obs[generic:ObsValue]")
-  date <- entries |>
-    xml2::xml_find_all(".//generic:ObsDimension") |>
-    xml2::xml_attr("value")
+    data <- c(series_key, attrs)
+    data$key <- paste(series_key, collapse = ".")
 
-  date <- switch(freq,
-    daily = as.Date(date),
-    monthly = as.Date(paste0(date, "-01")),
-    annual = as.integer(date),
-    date
-  )
+    data$freq <- switch(data$freq,
+      A = "annual",
+      S = "semi-annual",
+      Q = "quarterly",
+      M = "monthly",
+      W = "weekly",
+      D = "daily"
+    )
 
-  value <- entries |>
-    xml2::xml_find_all(".//generic:ObsValue") |>
-    xml2::xml_attr("value") |>
-    as.numeric()
+    entries <- x |> xml2::xml_find_all(".//generic:Obs[generic:ObsValue]")
+    date <- x |>
+      xml2::xml_find_all(".//generic:ObsDimension") |>
+      xml2::xml_attr("value")
 
-  data <- data.frame(
-    date = date,
-    title = title,
-    description = description,
-    unit = unit,
-    frequency = freq,
-    value = value
-  )
-  as_tibble(data)
+    data$date <- switch(data$freq,
+      daily = as.Date(date),
+      monthly = as.Date(paste0(date, "-01")),
+      annual = as.integer(date),
+      date
+    )
+
+    data$value <- entries |>
+      xml2::xml_find_all(".//generic:ObsValue") |>
+      xml2::xml_attr("value") |>
+      as.numeric()
+
+    as.data.frame(data)
+  })
+  nms <- lapply(res, names)
+  nms <- Reduce(intersect, nms)
+  nms <- intersect(c("date", "key", "value", "title", "description"), nms)
+  res <- lapply(res, \(x) x[nms])
+  res <- do.call(rbind, res)
+  res
 }
 
 #' Returns available data structures
@@ -145,8 +166,10 @@ ecb_metadata2 <- function(resource, agency = NULL, id = NULL) {
   # resource <- match.arg(
   #   resource, c("datastructure", "codelist", "dataflow", "categorisation")
   # )
-  stopifnot(is_string_or_null(agency))
-  stopifnot(is_string_or_null(id))
+  stopifnot(
+    is_string_or_null(agency),
+    is_string_or_null(id)
+  )
 
   xpath <- switch(resource,
     agencyscheme = "//str:AgencyScheme",
@@ -179,8 +202,10 @@ ecb_metadata2 <- function(resource, agency = NULL, id = NULL) {
 }
 
 ecb_metadata <- function(resource, xpath, agency = NULL, id = NULL) {
-  stopifnot(is_string_or_null(agency))
-  stopifnot(is_string_or_null(id))
+  stopifnot(
+    is_string_or_null(agency),
+    is_string_or_null(id)
+  )
   agency <- if (!is.null(agency)) toupper(agency) else "all"
   id <- if (!is.null(id)) toupper(id) else "all"
   resource <- paste(resource, agency, id, sep = "/")
