@@ -170,7 +170,6 @@ fetch_metadata <- function(resource, xpath, agency = NULL, id = NULL) {
   agency <- if (!is.null(agency)) toupper(agency) else "all"
   id <- if (!is.null(id)) toupper(id) else "all"
   resource <- paste(resource, agency, id, sep = "/")
-  print(resource)
   body <- ecb(resource)
   entries <- xml2::xml_find_all(body, xpath)
   res <- parse_metadata(entries)
