@@ -31,7 +31,7 @@ library(ecbr)
 # fetch US dollar/Euro exchange rate
 fx_rate <- ecb_data("EXR", "D.USD.EUR.SP00.A", start_period = "2021-01-01")
 fx_rate
-#> # A tibble: 854 × 16
+#> # A tibble: 887 × 16
 #>   date       key           value title description freq  currency currency_denom
 #>   <date>     <chr>         <dbl> <chr> <chr>       <chr> <chr>    <chr>         
 #> 1 2021-01-04 D.USD.EUR.SP…  1.23 US d… ECB refere… daily USD      EUR           
@@ -39,9 +39,9 @@ fx_rate
 #> 3 2021-01-06 D.USD.EUR.SP…  1.23 US d… ECB refere… daily USD      EUR           
 #> 4 2021-01-07 D.USD.EUR.SP…  1.23 US d… ECB refere… daily USD      EUR           
 #> 5 2021-01-08 D.USD.EUR.SP…  1.23 US d… ECB refere… daily USD      EUR           
-#> # ℹ 849 more rows
-#> # ℹ 8 more variables: exr_type <chr>, exr_suffix <chr>, collection <chr>,
-#> #   time_format <chr>, source_agency <chr>, unit_mult <chr>, decimals <chr>,
+#> # ℹ 882 more rows
+#> # ℹ 8 more variables: exr_type <chr>, exr_suffix <chr>, time_format <chr>,
+#> #   decimals <chr>, source_agency <chr>, unit_mult <chr>, collection <chr>,
 #> #   unit <chr>
 ```
 

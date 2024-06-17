@@ -124,94 +124,45 @@ parse_date <- function(date, freq) {
   )
 }
 
-#' Returns available data structures
+#' Returns the available metadata
 #'
-#' @param agency `character(1)` the agency to query. Defaut `NULL`.
-#' @param id `character(1)` id to query. Default `NULL`.
-#' @returns A `data.frame()` with the available data structures.
+#' Retrieval of the metadata stored in the ECB's time series database.
+#' Access via the SDMX Web Service API of the ECB
+#'
+#' @param type `character(1)` the type of metadata to query. One of:
+#' `"datastructure"`, `"dataflow"`, `"codelist"`, or `"concept"`.
+#' @param agency `character(1)` id of the agency to query. Default `NULL`.
+#' @param id `character(1)` id of the resource to query. Default `NULL`.
+#' @returns A `data.frame()` with the queried metadata.
 #' The columns are:
-#'   \item{id}{The id of the data structure}
-#'   \item{name}{The name of the data structure}
+#'   \item{agency}{The agency of the metadata}
+#'   \item{id}{The id of the metadata}
+#'   \item{name}{The name of the metadata}
 #' @source <https://data.ecb.europa.eu/help/api/metadata>
 #' @family metadata
 #' @export
 #' @examples
 #' \donttest{
-#' ecb_data_structure()
-#' # or filter by id
-#' ecb_data_structure(id = "ECB_BCS1")
+#' ecb_metadata("datastructure")
+#' ecb_metadata("datastructure", "ECB")
+#' ecb_metadata("datastructure", "ECB", "ECB_EXR1")
+#' ecb_metadata("datastructure", id = "ECB_EXR1")
 #' }
-ecb_data_structure <- function(agency = NULL, id = NULL) {
-  ecb_metadata("datastructure", "//str:DataStructure", agency, id)
-}
-
-#' Returns available code lists
-#'
-#' @inheritParams ecb_data_structure
-#' @inherit ecb_data_structure source
-#' @returns A data.frame with the available code lists. The columns are:
-#'   \item{id}{The id of the code list}
-#'   \item{name}{The name of the code list}
-#' @family metadata
-#' @export
-#' @examples
-#' \donttest{
-#' ecb_codelist()
-#' # or filter by id
-#' ecb_codelist(id = "CLI_EONIA_BANK")
-#' }
-ecb_codelist <- function(agency = NULL, id = NULL) {
-  ecb_metadata("codelist", "//str:Codelist", agency, id)
-  # WARNING: currenty only returning codelist id but not not the code id
-  #  <str:Codelist urn="urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ECB:CL_EXR_TYPE(1.0)" isExternalReference="false" agencyID="ECB" id="CL_EXR_TYPE" isFinal="false" version="1.0">
-  #  <com:Name xml:lang="en">Exchange rate type code list</com:Name>
-  #  <str:Code urn="urn:sdmx:org.sdmx.infomodel.codelist.Code=ECB:CL_EXR_TYPE(1.0).BRC0" id="BRC0">
-  #    <com:Name xml:lang="en">Real bilateral exchange rate, CPI deflated</com:Name>
-  #  </str:Code>
-}
-
-# Note: dataflow for fetching flow id
-
-ecb_metadata2 <- function(resource, agency = NULL, id = NULL) {
-  # resource <- match.arg(
-  #   resource, c("datastructure", "codelist", "dataflow", "categorisation")
-  # )
-  stopifnot(
-    is_string_or_null(agency),
-    is_string_or_null(id)
+ecb_metadata <- function(type, agency = NULL, id = NULL) {
+  type <- match.arg(type, c("datastructure", "dataflow", "codelist", "concept"))
+  args <- switch(type,
+    datastructure = list("datastructure", "//str:DataStructure"),
+    dataflow = list("dataflow", "//str:Dataflow"),
+    codelist = list("codelist", "//str:Codelist"),
+    concept = list("conceptscheme", "//str:ConceptScheme")
   )
 
-  xpath <- switch(resource,
-    agencyscheme = "//str:AgencyScheme",
-    categorisation = "//str:Categorisation",
-    categoryscheme = "//str:CategoryScheme",
-    codelist = "//str:Codelist",
-    conceptscheme = "//str:ConceptScheme",
-    contentconstraint = "//str:ContentConstraint",
-    dataflow = "//str:Dataflow",
-    datastructure = "//str:DataStructure",
-    hierarchicalcodelist = "//str:HierarchicalCodelist",
-    organisationscheme = "//str:AgencyScheme",
-    structureset = "//str:StructureSet"
-    # metadatastructure = "//str:MetadataStructure"
-    # metadataflow = "//str:MetadataFlow"
-    # dataproviderscheme = "//str:DataProviderScheme"
-    # dataconsumerscheme = "//str:DataConsumerScheme"
-    # organisationunitscheme = "//str:OrganisationUnitScheme"
-    # reportingtaxonomy = "//str:ReportingTaxonomy"
-  )
-
-  agency <- if (!is.null(agency)) toupper(agency) else "all"
-  id <- id %||% "all"
-  resource <- paste(resource, agency, id, sep = "/")
-  body <- ecb(resource)
-  body |> xml2::write_xml("tmp.xml")
-  entries <- xml2::xml_find_all(body, xpath)
-  res <- parse_metadata(entries)
+  fetch_metadata("datastructure", "//str:DataStructure", agency, id)
+  res <- do.call(fetch_metadata, c(args, list(agency, id)))
   as_tibble(res)
 }
 
-ecb_metadata <- function(resource, xpath, agency = NULL, id = NULL) {
+fetch_metadata <- function(resource, xpath, agency = NULL, id = NULL) {
   stopifnot(
     is_string_or_null(agency),
     is_string_or_null(id)
@@ -219,10 +170,11 @@ ecb_metadata <- function(resource, xpath, agency = NULL, id = NULL) {
   agency <- if (!is.null(agency)) toupper(agency) else "all"
   id <- if (!is.null(id)) toupper(id) else "all"
   resource <- paste(resource, agency, id, sep = "/")
+  print(resource)
   body <- ecb(resource)
   entries <- xml2::xml_find_all(body, xpath)
   res <- parse_metadata(entries)
-  as_tibble(res)
+  res
 }
 
 parse_metadata <- function(x, lang = "en") {
