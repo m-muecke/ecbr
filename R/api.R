@@ -156,8 +156,6 @@ ecb_metadata <- function(type, agency = NULL, id = NULL) {
     codelist = list("codelist", "//str:Codelist"),
     concept = list("conceptscheme", "//str:ConceptScheme")
   )
-
-  fetch_metadata("datastructure", "//str:DataStructure", agency, id)
   res <- do.call(fetch_metadata, c(args, list(agency, id)))
   as_tibble(res)
 }
