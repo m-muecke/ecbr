@@ -3,6 +3,9 @@
 \name{ecb_data}
 \alias{ecb_data}
 \title{Returns data for a given flow and key}
+\source{
+\url{https://data.ecb.europa.eu/help/api/data}
+}
 \usage{
 ecb_data(
   flow,
@@ -44,10 +47,11 @@ of the series. If \code{NULL}, no restriction is applied. Default \code{NULL}.}
 Returns data for a given flow and key
 }
 \examples{
+\donttest{
 # fetch US dollar/Euro exchange rate
 ecb_data("EXR", "D.USD.EUR.SP00.A")
+# fetch data for multiple keys
+ecb_data("EXR", c("D.USD", "JPY.EUR.SP00.A"))
 }
-\references{
-\url{https://data.ecb.europa.eu/help/api/data}
 }
 \concept{data}

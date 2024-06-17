@@ -3,6 +3,9 @@
 \name{ecb_data_structure}
 \alias{ecb_data_structure}
 \title{Returns available data structures}
+\source{
+\url{https://data.ecb.europa.eu/help/api/metadata}
+}
 \usage{
 ecb_data_structure(agency = NULL, id = NULL)
 }
@@ -21,12 +24,11 @@ The columns are:
 Returns available data structures
 }
 \examples{
+\donttest{
 ecb_data_structure()
 # or filter by id
 ecb_data_structure(id = "ECB_BCS1")
 }
-\references{
-\url{https://data.ecb.europa.eu/help/api/metadata}
 }
 \seealso{
 Other metadata: 

@@ -18,12 +18,16 @@
 #'   start of the series. If `NULL`, no restriction is applied. Default `NULL`.
 #' @param last_n `numeric(1)` number of observations to retrieve from the end
 #'  of the series. If `NULL`, no restriction is applied. Default `NULL`.
-#' @references <https://data.ecb.europa.eu/help/api/data>
+#' @source <https://data.ecb.europa.eu/help/api/data>
 #' @family data
 #' @export
 #' @examples
+#' \donttest{
 #' # fetch US dollar/Euro exchange rate
 #' ecb_data("EXR", "D.USD.EUR.SP00.A")
+#' # fetch data for multiple keys
+#' ecb_data("EXR", c("D.USD", "JPY.EUR.SP00.A"))
+#' }
 ecb_data <- function(flow,
                      key = NULL,
                      start_period = NULL,
@@ -32,14 +36,14 @@ ecb_data <- function(flow,
                      last_n = NULL) {
   stopifnot(
     is_string(flow),
-    is_string_or_null(key),
+    is_character_or_null(key),
     is_string_or_null(start_period),
     is_string_or_null(end_period),
     is_count_or_null(first_n),
     is_count_or_null(last_n)
   )
 
-  key <- key %||% "all"
+  key <- if (!is.null(key)) paste(key, collapse = "+") else "all"
   resource <- paste("data", flow, key, sep = "/")
   body <- ecb(
     resource = resource,
@@ -128,13 +132,15 @@ parse_date <- function(date, freq) {
 #' The columns are:
 #'   \item{id}{The id of the data structure}
 #'   \item{name}{The name of the data structure}
-#' @references <https://data.ecb.europa.eu/help/api/metadata>
+#' @source <https://data.ecb.europa.eu/help/api/metadata>
 #' @family metadata
 #' @export
 #' @examples
+#' \donttest{
 #' ecb_data_structure()
 #' # or filter by id
 #' ecb_data_structure(id = "ECB_BCS1")
+#' }
 ecb_data_structure <- function(agency = NULL, id = NULL) {
   ecb_metadata("datastructure", "//str:DataStructure", agency, id)
 }
@@ -142,16 +148,18 @@ ecb_data_structure <- function(agency = NULL, id = NULL) {
 #' Returns available code lists
 #'
 #' @inheritParams ecb_data_structure
-#' @inherit ecb_data_structure references
+#' @inherit ecb_data_structure source
 #' @returns A data.frame with the available code lists. The columns are:
 #'   \item{id}{The id of the code list}
 #'   \item{name}{The name of the code list}
 #' @family metadata
 #' @export
 #' @examples
+#' \donttest{
 #' ecb_codelist()
 #' # or filter by id
 #' ecb_codelist(id = "CLI_EONIA_BANK")
+#' }
 ecb_codelist <- function(agency = NULL, id = NULL) {
   ecb_metadata("codelist", "//str:Codelist", agency, id)
   # WARNING: currenty only returning codelist id but not not the code id

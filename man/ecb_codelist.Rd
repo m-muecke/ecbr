@@ -3,6 +3,9 @@
 \name{ecb_codelist}
 \alias{ecb_codelist}
 \title{Returns available code lists}
+\source{
+\url{https://data.ecb.europa.eu/help/api/metadata}
+}
 \usage{
 ecb_codelist(agency = NULL, id = NULL)
 }
@@ -20,12 +23,11 @@ A data.frame with the available code lists. The columns are:
 Returns available code lists
 }
 \examples{
+\donttest{
 ecb_codelist()
 # or filter by id
 ecb_codelist(id = "CLI_EONIA_BANK")
 }
-\references{
-\url{https://data.ecb.europa.eu/help/api/metadata}
 }
 \seealso{
 Other metadata: 
