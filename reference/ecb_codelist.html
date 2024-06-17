@@ -55,6 +55,10 @@
     </div>
 
     <div class="section level2">
+    <h2 id="source">Source<a class="anchor" aria-label="anchor" href="#source"></a></h2>
+    <p><a href="https://data.ecb.europa.eu/help/api/metadata" class="external-link">https://data.ecb.europa.eu/help/api/metadata</a></p>
+    </div>
+    <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>agency</dt>
 <dd><p><code>character(1)</code> the agency to query. Defaut <code>NULL</code>.</p></dd>
@@ -77,10 +81,6 @@
 
 </dl></div>
     <div class="section level2">
-    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p><a href="https://data.ecb.europa.eu/help/api/metadata" class="external-link">https://data.ecb.europa.eu/help/api/metadata</a></p>
-    </div>
-    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other metadata: 
 <code><a href="ecb_data_structure.html">ecb_data_structure</a>()</code></p></div>
@@ -88,8 +88,9 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">ecb_codelist</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 145,806 × 3</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="fu">ecb_codelist</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 145,915 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    agency id             name                                                   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> ECB    CLI_EONIA_BANK EONIA code list for banks                              </span>
@@ -102,7 +103,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> ECB    CLI_LM_ITEM    Claims on non-euro area residents denominated in forei…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> ECB    CLI_LM_ITEM    Receivables from the IMF                               </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> ECB    CLI_LM_ITEM    Balances with banks and security investments, external…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 145,796 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 145,905 more rows</span></span>
 <span class="r-in"><span><span class="co"># or filter by id</span></span></span>
 <span class="r-in"><span><span class="fu">ecb_codelist</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"CLI_EONIA_BANK"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 3</span></span>
@@ -110,6 +111,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ECB    CLI_EONIA_BANK EONIA code list for banks</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ECB    CLI_EONIA_BANK EONIA Total/aggregate    </span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
