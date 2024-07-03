@@ -6,9 +6,13 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+superseded](https://img.shields.io/badge/lifecycle-superseded-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#superseded)
 [![R-CMD-check](https://github.com/m-muecke/ecbr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/m-muecke/ecbr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
+
+> Note this package is retired in favor of the
+> [bbk](https://github.com/m-muecke/bbk) package, which provides
+> additional central bank data sources.
 
 ecbr is a minimal R client for the [ECB
 API](https://data.ecb.europa.eu/help/api/overview).
@@ -31,7 +35,7 @@ library(ecbr)
 # fetch US dollar/Euro exchange rate
 fx_rate <- ecb_data("EXR", "D.USD.EUR.SP00.A", start_period = "2021-01-01")
 fx_rate
-#> # A tibble: 887 × 16
+#> # A tibble: 898 × 16
 #>   date       key           value title description freq  currency currency_denom
 #>   <date>     <chr>         <dbl> <chr> <chr>       <chr> <chr>    <chr>         
 #> 1 2021-01-04 D.USD.EUR.SP…  1.23 US d… ECB refere… daily USD      EUR           
@@ -39,9 +43,9 @@ fx_rate
 #> 3 2021-01-06 D.USD.EUR.SP…  1.23 US d… ECB refere… daily USD      EUR           
 #> 4 2021-01-07 D.USD.EUR.SP…  1.23 US d… ECB refere… daily USD      EUR           
 #> 5 2021-01-08 D.USD.EUR.SP…  1.23 US d… ECB refere… daily USD      EUR           
-#> # ℹ 882 more rows
-#> # ℹ 8 more variables: exr_type <chr>, exr_suffix <chr>, time_format <chr>,
-#> #   decimals <chr>, source_agency <chr>, unit_mult <chr>, collection <chr>,
+#> # ℹ 893 more rows
+#> # ℹ 8 more variables: exr_type <chr>, exr_suffix <chr>, decimals <chr>,
+#> #   source_agency <chr>, time_format <chr>, collection <chr>, unit_mult <chr>,
 #> #   unit <chr>
 ```
 

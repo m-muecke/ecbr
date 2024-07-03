@@ -17,9 +17,13 @@ options(tibble.print_min = 5L, tibble.print_max = 5L)
 # ecbr
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Lifecycle: superseded](https://img.shields.io/badge/lifecycle-superseded-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#superseded)
 [![R-CMD-check](https://github.com/m-muecke/ecbr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/m-muecke/ecbr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
+
+
+> Note this package is retired in favor of the [bbk](https://github.com/m-muecke/bbk) package,
+> which provides additional central bank data sources.
 
 ecbr is a minimal R client for the [ECB API](https://data.ecb.europa.eu/help/api/overview).
 
